@@ -20,4 +20,4 @@ const theaterSchema = new mongoose.Schema({
 })
 
 const theater = mongoose.model('theater', theaterSchema);
-module.exports = theater
+export default  theater;

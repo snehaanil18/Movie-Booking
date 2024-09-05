@@ -44,9 +44,8 @@ const movieSchema = new mongoose.Schema({
     },
     userId:{
         type:String,
-        required:true
     }
 })
 
-const Movie = mongoose.model('Movie', movieSchema);
-module.exports = Movie
+const movies = mongoose.model('movies', movieSchema);
+export default movies;
