@@ -6,33 +6,51 @@ const addTheater = async (req,res) => {
     const userId = req.payload;
 
     try{
-        const user = await users.findById(userId);
-        if (!user) {
-            return res.status(404).json({ message: "User not found" });
+        if(userId == 'admin'){
+            const newTheater = new theater({
+                name,
+                address,
+                city,
+                capacity,
+                userId, 
+            });
+            await newTheater.save();
+            res.status(200).json(newTheater)
         }
 
-        if (user.role !== 'vendor') {
+        else {
             return res.status(403).json({ message: "Access denied. User is not a vendor." });
         }
 
-        const newTheater = new theater({
-            name,
-            address,
-            city,
-            capacity,
-            userId, 
-        });
-        await newTheater.save();
-        res.status(200).json(newTheater)
     }
     catch(err){
         res.status(500).json(err)
     }
 }
 
+const userTheaters = async(req,res) => {
+    const userId = req.payload;
+    if (userId == !'admin') {
+        return res.status(401).json('Access Denied.')
+    }
+
+    try{
+        const existingTheaters = await theater.find();
+        if(existingTheaters){
+            res.status(200).json(existingTheaters)
+        }
+        else {
+            res.status(401).json('database empty')
+        }
+    }
+    catch(err){
+        res.status(500).json('failed' + err)
+    }
+}
+
 const theaterController = {
     addTheater,
-   
+    userTheaters
 };
 
 export default theaterController;

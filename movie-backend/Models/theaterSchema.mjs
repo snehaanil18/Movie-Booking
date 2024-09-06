@@ -17,6 +17,9 @@ const theaterSchema = new mongoose.Schema({
         type: Number, 
         required: true 
     },
+    userId: {
+        type:String
+    }
 })
 
 const theater = mongoose.model('theater', theaterSchema);

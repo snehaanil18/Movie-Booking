@@ -27,11 +27,19 @@ const register = async (req, res) => {
 
 const login = async(req,res) => {
     const { email, password } = req.body;
+    const adminEmail = "admin@example.com";
+    const adminPassword = "adminpassword";
+  
     try{
+        if (email === adminEmail && password === adminPassword) {
+            const adminToken = jwt.sign({ userId: "admin", role: "admin" }, "superkey", { expiresIn: '1h' });
+            return res.status(200).json({ message: "Admin logged in", adminToken });
+        }
+        
         const existingUser = await users.findOne({ email, password });
         if (existingUser) {
             const token = jwt.sign({ userId: existingUser._id }, "superkey");
-            res.status(200).json({ existingUser, token });
+            res.status(200).json({message: "User logged in", existingUser, token });
         } else {
             // If no user is found with the provided email and password
             res.status(404).json('Invalid email or password' );
